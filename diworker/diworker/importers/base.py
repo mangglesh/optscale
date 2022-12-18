@@ -49,8 +49,8 @@ class BaseReportImporter:
 
     @property
     def s3_client(self):
-        if self._s3_client is None:
-            s3_params = self.config_cl.read_branch('/minio')
+       if self._s3_client is None:
+            s3_params = self._config.read_branch('/minio')
             # self._s3_client = boto3.client(
             #     's3',
             #     endpoint_url='http://{}:{}'.format(
