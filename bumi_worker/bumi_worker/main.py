@@ -31,8 +31,8 @@ dlx_task_queue = Queue(DLX_EXCHANGE_NAME, dlx_task_exchange,
 RETRY_POLICY = {'max_retries': 15, 'interval_start': 0,
                 'interval_step': 1, 'interval_max': 3}
 LOG = get_logger(__name__)
-DEFAULT_ETCD_HOST = 'etcd'
-DEFAULT_ETCD_PORT = 80
+DEFAULT_ETCD_HOST = 'localhost'
+DEFAULT_ETCD_PORT = 2379
 
 
 class Worker(ConsumerProducerMixin):

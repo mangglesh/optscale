@@ -15,8 +15,8 @@ from katara_service.urls import urls_v2
 
 
 DEFAULT_PORT = 8935
-DEFAULT_ETCD_HOST = 'etcd'
-DEFAULT_ETCD_PORT = 80
+DEFAULT_ETCD_HOST = 'localhost'
+DEFAULT_ETCD_PORT = 2379
 
 BASEDIR_NAME = os.path.dirname(__file__)
 BASEDIR_PATH = os.path.abspath(BASEDIR_NAME)

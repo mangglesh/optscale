@@ -4,7 +4,6 @@ import uuid
 import string
 import random
 from sqlalchemy import Enum, UniqueConstraint
-from sqlalchemy.ext.declarative.base import _declarative_constructor
 from datetime import datetime
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
 from sqlalchemy import (Column, String, Integer, ForeignKey, TIMESTAMP,

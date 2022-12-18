@@ -77,6 +77,7 @@ class ScheduleController(object):
             next_run = checklist['next_run']
             last_completed = checklist['last_completed']
             last_run = checklist['last_run']
+            LOG.info('Next run {}, last run {} last completed {}'.format(next_run, last_run, last_completed ))
             if next_run <= int(
                     now.timestamp()) and last_completed == last_run:
                 scheduled.append(checklist)

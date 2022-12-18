@@ -85,7 +85,9 @@ MenuItem.propTypes = {
   fromMainMenu: PropTypes.bool,
   link: PropTypes.string,
   dataTestId: PropTypes.string,
-  isActive: PropTypes.func
+  isActive: PropTypes.func,
+  isRootPath: PropTypes.func,
+  dataProductTourId: PropTypes.string
 };
 
 export default MenuItem;

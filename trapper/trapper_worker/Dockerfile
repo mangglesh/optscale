@@ -1,11 +1,10 @@
-FROM optscale_python:local
-MAINTAINER Hystax
+FROM python
 
 WORKDIR /usr/src/app/trapper_worker
 ENV PYTHONPATH=/usr/src/app/
 
-COPY trapper_worker/requirements.txt ./requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
 COPY trapper_worker/*.py ./
-
+COPY trapper_worker/cloud_adapter ./cloud_adapter
+COPY trapper_worker/config_client ./config_client
+COPY trapper_worker/rest_api_client ./rest_api_client
 CMD ["python", "-u","/usr/src/app/trapper_worker/main.py"]

@@ -159,7 +159,7 @@ class ExpensesRecalculationScheduleController(ReportImportBaseController):
 
 
 class ReportImportFileController(ReportImportBaseController):
-    BUCKET_NAME = 'report-imports'
+    BUCKET_NAME = 'pollux-rera-crawler'
     MAX_BUFFER_SIZE = 5 * 1024 * 1024
 
     def __init__(self, *args, **kwargs):
@@ -175,18 +175,24 @@ class ReportImportFileController(ReportImportBaseController):
     def s3_client(self):
         if self._s3_client is None:
             s3_params = self._config.read_branch('/minio')
-            self._s3_client = boto3.client(
+            # self._s3_client = boto3.client(
+            #     's3',
+            #     endpoint_url='http://{}:{}'.format(
+            #         s3_params['host'], s3_params['port']),
+            #     aws_access_key_id=s3_params['access'],
+            #     aws_secret_access_key=s3_params['secret'],
+            #     config=BotoConfig(s3={'addressing_style': 'path'})
+            # )
+            self._s3_client= boto3.client(
                 's3',
-                endpoint_url='http://{}:{}'.format(
-                    s3_params['host'], s3_params['port']),
-                aws_access_key_id=s3_params['access'],
-                aws_secret_access_key=s3_params['secret'],
-                config=BotoConfig(s3={'addressing_style': 'path'})
-            )
-            try:
-                self._s3_client.create_bucket(Bucket=self.BUCKET_NAME)
-            except self._s3_client.exceptions.BucketAlreadyOwnedByYou:
-                pass
+                aws_access_key_id=s3_params['access'],     # This is not recommended and not secure
+                aws_secret_access_key=s3_params['secret'], # Please configure ~/.aws/credentials file
+                region_name=s3_params['host']       # and boto3 will get the credentials from there.
+                )
+            # try:
+            #     self._s3_client.create_bucket(Bucket=self.BUCKET_NAME)
+            # except self._s3_client.exceptions.BucketAlreadyOwnedByYou:
+            #     pass
         return self._s3_client
 
     def initialize_upload(self, cloud_account_id):

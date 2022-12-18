@@ -17,12 +17,15 @@ def import_module(module_name, module_type):
     if not module_name:
         return
     pythonpath = environ['PYTHONPATH'].split(pathsep)[0]
+    print(pythonpath)
     modules = list_modules(module_type)
+    print(modules)
     if module_name not in modules:
         raise UnknownModuleException(
             'Module %s is unknown in %s scope' % (module_name, module_type))
     import_base = dirname(__file__)[len(pythonpath):]
     import_base = import_base.replace('/', '.')
+    print(import_base)
     return __import__('%s.%s.%s' % (import_base, module_type, module_name),
                       globals(), locals(), modules, 0)
 

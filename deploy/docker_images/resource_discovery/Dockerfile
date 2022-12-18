@@ -1,10 +1,10 @@
-FROM acura-dr.dts.loc/optscale_python:94098b67b949e2fabcc2404becf90a25f77496e6
+FROM python
 
 WORKDIR /src
-
-COPY requirements.txt .
-RUN pip install --use-deprecated=legacy-resolver --no-cache-dir -r requirements.txt
+ENV PYTHONPATH=/src
 
 COPY scheduler.py worker.py ./
-
-CMD ["python3", "/src/worker.py"]
+COPY cloud_adapter ./cloud_adapter
+COPY config_client ./config_client
+COPY rest_api_client ./rest_api_client
+CMD ["python", "-u", "/src/scheduler.py"]

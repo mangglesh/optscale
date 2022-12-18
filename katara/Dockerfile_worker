@@ -1,12 +1,11 @@
-FROM optscale_python:local
-MAINTAINER Hystax
-
+FROM python
 WORKDIR /usr/src/app/katara_worker
 ENV PYTHONPATH=/usr/src/app/
 
-COPY requirements_worker.txt ./requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
 COPY katara_worker/reports_generators ./reports_generators
 COPY katara_worker/*.py ./
-
+COPY katara_worker/auth_client ./auth_client
+COPY katara_worker/katara_client ./katara_client
+COPY katara_worker/rest_api_client ./rest_api_client
+COPY katara_worker/config_client ./config_client
 CMD ["python", "-u","/usr/src/app/katara_worker/main.py"]

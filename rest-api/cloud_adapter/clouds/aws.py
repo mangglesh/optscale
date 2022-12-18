@@ -552,15 +552,15 @@ class Aws(CloudBase):
         resp = self.s3.list_objects_v2(
             Bucket=bucket_name,
             Prefix='{0}/{1}'.format(prefix, report_name))
-
+        LOG.critical("************s3 response %s "% resp )
         reports = self.find_csv_reports(resp, prefix, report_name)
         if not reports:
             reports = self.find_parquet_reports(resp, prefix, report_name)
 
         if not reports:
             raise ReportFilesNotFoundException(
-                'Report files for report {} not found in bucket {}'.format(
-                    report_name, bucket_name))
+                'Report files for report {} not found in bucket {}, {} '.format(
+                    report_name, bucket_name, resp))
         return reports
 
     def find_parquet_reports(self, s3_objects, prefix, report_name):

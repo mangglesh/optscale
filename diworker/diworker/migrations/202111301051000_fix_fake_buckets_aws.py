@@ -236,6 +236,7 @@ class Migration(BaseMigration):
                         usage_resources.append(bucket_id)
                     else:
                         tax_resources.append(bucket_id)
+                change_resources=[]
                 if resources_with_id:
                     change_resources = self.check_resources_with_id(
                         ca_id, resources_with_id)
@@ -246,13 +247,14 @@ class Migration(BaseMigration):
                     change_resources = self.check_tax_resources(
                         ca_id, tax_resources, change_resources)
                 updates = []
-                for new_type, resource_ids in change_resources.items():
-                    updates.append(UpdateMany(
-                        filter={
-                            'cloud_account_id': ca_id,
-                            'cloud_resource_id': {'$in': resource_ids}
-                        }, update={'$set': {'resource_type': new_type}}))
-                    new_types.add(new_type)
+                if change_resources:
+                    for new_type, resource_ids in change_resources.items():
+                        updates.append(UpdateMany(
+                            filter={
+                                'cloud_account_id': ca_id,
+                                'cloud_resource_id': {'$in': resource_ids}
+                            }, update={'$set': {'resource_type': new_type}}))
+                        new_types.add(new_type)
                 if updates:
                     self.mongo_resources.bulk_write(updates)
                     self.mongo_expenses.bulk_write(updates)

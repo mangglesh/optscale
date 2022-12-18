@@ -1,0 +1,14 @@
+version: '2'
+services:
+  clickhouse:
+    image: docker.io/bitnami/clickhouse:22
+    environment:
+      - CLICKHOUSE_ADMIN_PASSWORD=password123
+    ports:
+      - '8123:8123'
+      - '9000:9000'
+    volumes:
+      - clickhouse_data:/bitnami/clickhouse
+volumes:
+  clickhouse_data:
+    driver: local

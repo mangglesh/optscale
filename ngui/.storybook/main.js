@@ -3,7 +3,7 @@ module.exports = {
     builder: "webpack5"
   },
   reactOptions: {
-    strictMode: true
+    strictMode: false
   },
   stories: ["../src/stories/**/*.stories.js"],
   addons: [

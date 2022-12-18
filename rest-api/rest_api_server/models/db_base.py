@@ -1,7 +1,7 @@
 from sqlalchemy.orm import sessionmaker, scoped_session
 from retrying import retry
 
-from snapman_common.constants import DEFAULT_RETRY_ARGS
+#from snapman_common.constants import DEFAULT_RETRY_ARGS
 import rest_api_server.models.models as model_base
 
 
@@ -24,7 +24,7 @@ class BaseDB(object):
         """
         return scoped_session(sessionmaker(bind=engine))
 
-    @retry(**DEFAULT_RETRY_ARGS, retry_on_exception=should_retry)
+    #@retry(**DEFAULT_RETRY_ARGS, retry_on_exception=should_retry)
     def create_all(self):
         model_base.Base.metadata.create_all(self.engine)
 

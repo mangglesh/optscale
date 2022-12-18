@@ -1,12 +1,9 @@
-FROM optscale_python:local
-MAINTAINER Hystax
+FROM python
 
 WORKDIR /usr/src/app/bumi_scheduler
-ENV PYTHONPATH /usr/src/app/
-
-COPY requirements.txt ./requirements.txt
-RUN pip install --no-cache-dir -r /usr/src/app/bumi_scheduler/requirements.txt
 COPY bumi_scheduler/controllers ./controllers
 COPY bumi_scheduler/*.py ./
+COPY config_client ./config_client
+COPY rest_api_client ./rest_api_client
 
 CMD ["python", "-u","/usr/src/app/bumi_scheduler/main.py"]

@@ -1,10 +1,8 @@
-FROM acura-dr.dts.loc/optscale_python:94098b67b949e2fabcc2404becf90a25f77496e6
-
+FROM python
 WORKDIR /src
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
 COPY scheduler.py worker.py ./
+COPY rest_api_client ./rest_api_client
+COPY config_client ./config_client
 
-CMD ["python3", "/src/worker.py"]
+CMD ["python3", "/src/scheduler.py"]

@@ -21,7 +21,7 @@ class ReportImportAsyncHandler(BaseAuthHandler, BaseAsyncItemHandler):
         pass
 
     async def prepare(self):
-        await super().prepare()
+        #await super().prepare()
         # this setting is necessary to avoid getting "Content-Length too long"
         # error from tornado, tornado will not load the whole file into memory
         # due to stream_request_body decorator

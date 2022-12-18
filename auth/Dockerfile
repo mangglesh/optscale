@@ -1,15 +1,8 @@
-FROM optscale_python:local
-MAINTAINER Hystax
+FROM python
 
 WORKDIR /usr/src/app/auth_server
 ENV PYTHONPATH /usr/src/app/
 
-COPY requirements.txt .
-RUN apt-get update && apt-get install -y libsodium-dev \
-    && pip install --no-cache-dir -r /usr/src/app/auth_server/requirements.txt \
-    && apt-get autoremove -y \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
 COPY auth_server/alembic ./alembic
 COPY auth_server/controllers ./controllers
 COPY auth_server/handlers ./handlers
@@ -18,6 +11,11 @@ COPY auth_server/models ./models
 COPY auth_server/*.py ./
 COPY auth_server/alembic.template .
 COPY auth_server/swagger ./swagger
+COPY auth_server/config_client ./config_client
+COPY auth_server/rest_api_client ./rest_api_client
+COPY auth_server/optscale_exceptions ./optscale_exceptions
+COPY auth_server/zoho_integrator ./zoho_integrator
+
 RUN python -u write_spec.py
 
 CMD ["python", "-u","/usr/src/app/auth_server/server.py"]

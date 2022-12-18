@@ -7,11 +7,11 @@ import tornado.web
 
 import config_client.client
 
-from bumi_scheduler.controllers.schedule import ScheduleController
+from controllers.schedule import ScheduleController
 
 
-DEFAULT_ETCD_HOST = 'etcd'
-DEFAULT_ETCD_PORT = 80
+DEFAULT_ETCD_HOST = 'localhost'
+DEFAULT_ETCD_PORT = 2379
 
 LOG = logging.getLogger(__name__)
 
