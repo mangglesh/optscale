@@ -31,7 +31,7 @@ securityDefinitions:
 
 
 def main():
-    settings = yaml.load(OPENAPI_SPEC)
+    settings = yaml.load(OPENAPI_SPEC,  Loader=yaml.Loader)
     title = settings['info'].pop('title')
     spec_version = settings['info'].pop('version')
     openapi_version = settings.pop('swagger')

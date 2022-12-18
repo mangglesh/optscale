@@ -164,6 +164,7 @@ class RuleController(BaseController, PriorityMixin):
             raise_not_provided_exception('conditions')
         all_rules = self._get_rules(organization_id)
         default_priority = len(all_rules) + 1
+        print('bbbbbbbbbbbb'+organization_id)
         rule = Rule(
             id=gen_id(),
             name=name, creator_id=employee.id,
@@ -172,6 +173,7 @@ class RuleController(BaseController, PriorityMixin):
             priority=default_priority,
             pool_id=pool_id, owner_id=owner_id
         )
+        print(rule.organization_id)
         if is_deprioritized:
             priority = default_priority
         else:

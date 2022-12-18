@@ -1,5 +1,5 @@
 SQLAlchemy==1.1.4
-config-client==1.0.70
+config-client==1.2.0
 tornado==6.2
 requests==2.25.0
 optscale-exceptions==0.0.23
@@ -11,3 +11,4 @@ pystache==0.5.4
 optscale-types==0.0.8
 cryptography==3.3.1
 boto3==1.12.25
+python-etcd 

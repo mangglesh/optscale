@@ -17,8 +17,9 @@ depends_on = None
 
 
 def upgrade():
-    op.drop_constraint('def_pool_employee_fk', 'employee', type_='foreignkey')
-    op.drop_column('employee', 'default_pool_id')
+    # op.drop_constraint('def_pool_employee_fk', 'employee', type_='foreignkey')
+    # op.drop_column('employee', 'default_pool_id')
+    pass
 
 
 def downgrade():

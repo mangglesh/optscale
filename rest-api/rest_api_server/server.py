@@ -17,8 +17,8 @@ from rest_api_server.handlers.v1.swagger import SwaggerStaticFileHandler
 
 
 DEFAULT_PORT = 8999
-DEFAULT_ETCD_HOST = 'etcd'
-DEFAULT_ETCD_PORT = 80
+DEFAULT_ETCD_HOST = 'localhost'
+DEFAULT_ETCD_PORT = 2379
 
 LOG = logging.getLogger(__name__)
 
@@ -380,15 +380,14 @@ def get_handler_version(h_v, handler, default_version=h_v1):
 def make_app(db_type, etcd_host, etcd_port, wait=False):
     config_cl = config_client.client.Client(host=etcd_host, port=etcd_port)
     if wait:
-        config_cl.wait_configured()
-
+         config_cl.wait_configured()
     db = DBFactory(db_type, config_cl).db
     if wait:
         # Use lock to avoid migration problems with several restapis
         # starting at the same time on cluster
         LOG.info('Waiting for migration lock')
-        with EtcdLock(config_cl, 'restapi_migrations'):
-            db.create_schema()
+        #with EtcdLock(config_cl, 'restapi_migrations'):
+        db.create_schema()
     else:
         db.create_schema()
 
@@ -404,7 +403,7 @@ def make_app(db_type, etcd_host, etcd_port, wait=False):
 
 
 def main():
-    if os.environ.get('PYCHARM_DEBUG_HOST'):
+    if os.environ.get('PYCHARM_DEBUG_HOST',):
         pydevd_pycharm.settrace(
             host=os.environ['PYCHARM_DEBUG_HOST'],
             port=int(os.environ.get('PYCHARM_DEBUG_PORT', 3000)),

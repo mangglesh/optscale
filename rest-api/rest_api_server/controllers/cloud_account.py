@@ -313,8 +313,10 @@ class CloudAccountController(BaseController):
             organization_id=cloud_account_org_id, parent_id=ca_obj.organization.pool_id,
             name=pool_name, default_owner_id=default_employee.id)
         rule_name = 'Rule for %s_%s' % (ca_obj.name, int(datetime.utcnow().timestamp()))
+
+        print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa  '+cloud_account_org_id)
         RuleController(self.session, self._config, self.token).create_rule(
-            auth_user_id, cloud_pool.organization_id, self.token,
+            auth_user_id, cloud_account_org_id, self.token,
             name=rule_name, owner_id=cloud_pool.default_owner_id,
             pool_id=cloud_pool.id, is_deprioritized=True, conditions=[
                 {

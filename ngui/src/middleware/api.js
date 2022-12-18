@@ -9,7 +9,7 @@ import { ALERT_SEVERITY } from "utils/constants";
 import { getFullPath } from "utils/network";
 import requestManager from "utils/requestManager";
 import { getSuccessAlertSettingsByLabel } from "utils/successCodes";
-import history from "../history";
+import history from "../browserHistory";
 
 axios.interceptors.request.use(
   (config) => {

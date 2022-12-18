@@ -25,9 +25,9 @@ def upgrade():
                                 nullable=False, default=24)
     c_last_import_at = sa.Column('last_import_at', sa.Integer(),
                                  nullable=False, default=0)
-    op.add_column('cloudcredentials', c_auto_import)
-    op.add_column('cloudcredentials', c_import_period)
-    op.add_column('cloudcredentials', c_last_import_at)
+    #op.add_column('cloudcredentials', c_auto_import)
+    #op.add_column('cloudcredentials', c_import_period)
+    #op.add_column('cloudcredentials', c_last_import_at)
     creds_table = sa.table(
         'cloudcredentials', c_auto_import, c_import_period, c_last_import_at)
     bind = op.get_bind()

@@ -251,6 +251,8 @@ class BaseAuthHandler(BaseHandler):
         return self._check_secret(self.cluster_secret, **kwargs)
 
     def _check_secret(self, secret, raises=True):
+        print(self.secret)
+        print(secret)
         if raises and not self.secret == secret:
             raise OptHTTPError(403, Err.OE0236, [])
         else:

@@ -17,7 +17,7 @@ from rest_api_server.controllers.base import (BaseController,
                                               BaseHierarchicalController,
                                               MongoMixin, ClickHouseMixin,
                                               ResourceFormatMixin)
-
+from sqlalchemy.sql import text
 from cloud_adapter.cloud import Cloud as CloudAdapter
 
 LOG = logging.getLogger(__name__)
@@ -1349,7 +1349,7 @@ class CleanExpenseController(BaseController, MongoMixin, ClickHouseMixin,
 
     def _get_cloud_account_types(self, cloud_account_ids):
         res = self.session.query(
-            CloudAccount.id, CloudAccount.type.name
+            CloudAccount.id, text(CloudAccount.type.name)
         ).filter(
             CloudAccount.id.in_(cloud_account_ids),
             CloudAccount.deleted.is_(False)

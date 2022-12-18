@@ -166,10 +166,10 @@ def _create_indexes(collection, indexes, downgrade=False):
 
 def upgrade():
     for fk in FOREIGN_KEYS:
-        op.drop_constraint(constraint_name=fk['old_name'],
-                           table_name=fk['table'], type_='foreignkey')
+        # op.drop_constraint(constraint_name=fk['old_name'],
+        #                    table_name=fk['table'], type_='foreignkey')
         op.create_foreign_key(
-            name=fk['new_name'], source_table=fk['table'],
+            constraint_name=fk['new_name'], source_table=fk['table'],
             referent_table=fk['ref_table'], local_cols=fk['local_cols'],
             remote_cols=fk['remote_cols'])
 

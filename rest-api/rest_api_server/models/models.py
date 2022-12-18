@@ -2,7 +2,7 @@ import json
 
 from sqlalchemy import Enum, and_
 from sqlalchemy import inspect
-from sqlalchemy.ext.declarative.base import _declarative_constructor
+#from sqlalchemy.ext.declarative.base import _declarative_constructor
 from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
 from sqlalchemy import (Column, Integer, String, Boolean,
@@ -56,7 +56,7 @@ class Base(object):
         for col in init_columns:
             setattr(self, col.name, kwargs.get(col.name))
             kwargs.pop(col.name, None)
-        _declarative_constructor(self, **kwargs)
+        #_declarative_constructor(self, **kwargs)
 
     @declared_attr
     # pylint: disable=E0213
@@ -764,8 +764,10 @@ class Rule(Base, CreatedMixin, ImmutableMixin):
                         info=ColumnPermissions.create_only,
                         nullable=False)
     organization_id = Column(
-        Uuid('organization_id'), ForeignKey('organization.id'), nullable=False)
-    organization = relationship('Organization')
+        Uuid('organization_id'), ForeignKey('organization.id'),info=ColumnPermissions.create_only,
+                        nullable=False)
+    print("0000000000000000 "+organization_id)                    
+    organization = relationship('Organization', foreign_keys=[organization_id])
 
     active = Column(Boolean, nullable=False,
                     default=True,

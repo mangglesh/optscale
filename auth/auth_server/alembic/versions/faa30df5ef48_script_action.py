@@ -20,7 +20,6 @@ import sqlalchemy as sa
 from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, TEXT, \
     Index, and_
 from sqlalchemy.ext.declarative import declared_attr, declarative_base
-from sqlalchemy.ext.declarative.base import _declarative_constructor
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import Session, relationship, backref
 

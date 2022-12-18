@@ -59,7 +59,6 @@ const Popover = ({
     <div className={classes.container}>
       <div
         aria-describedby={id}
-        variant="contained"
         onClick={handleClick}
         data-test-id={labelDataTestId}
         className={rightLabelPosition ? classes.rightLabelPosition : ""}

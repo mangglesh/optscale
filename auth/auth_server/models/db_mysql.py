@@ -9,11 +9,10 @@ class MySQLDB(BaseDB):
         return create_engine(
             'mysql+mysqlconnector://%s:%s@%s/%s?charset=utf8mb4' %
             self._config.auth_db_params(),
-            # inactive connections are invalidated by server
-            # in ~10 minutes (600 seconds)
+            # inactive connections are invalidated in ~10 minutes (600 seconds)
             pool_recycle=500,
-            pool_size=25,
-            max_overflow=10,
+            pool_size=200,
+            max_overflow=25,
         )
 
     def create_schema(self):

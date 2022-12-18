@@ -1,11 +1,10 @@
-FROM optscale_python:local
-MAINTAINER Hystax
+FROM python
 
 WORKDIR /usr/src/app/metroculus_scheduler
 ENV PYTHONPATH=/usr/src/app/
 
-COPY metroculus_scheduler/requirements.txt ./requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
 COPY metroculus_scheduler/*.py ./
+COPY config_client ./config_client
+COPY rest_api_client ./rest_api_client
 
 CMD ["python", "-u","/usr/src/app/metroculus_scheduler/main.py"]

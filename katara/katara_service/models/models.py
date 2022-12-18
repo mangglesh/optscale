@@ -6,7 +6,6 @@ import json
 from sqlalchemy import Column, Integer, String, Enum, TEXT, ForeignKey
 from sqlalchemy import inspect, UniqueConstraint, or_
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
-from sqlalchemy.ext.declarative.base import _declarative_constructor
 from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 from sqlalchemy.orm import relationship
 
@@ -64,7 +63,6 @@ class Base(object):
         for col in init_columns:
             setattr(self, col.name, kwargs.get(col.name))
             kwargs.pop(col.name, None)
-        _declarative_constructor(self, **kwargs)
 
     @declared_attr
     # pylint: disable=E0213

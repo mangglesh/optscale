@@ -16,6 +16,8 @@ IGNORED_CLOUD_TYPES = ['environment']
 RETRY_POLICY = {'max_retries': 15, 'interval_start': 0,
                 'interval_step': 1, 'interval_max': 3}
 
+DEFAULT_ETCD_HOST = 'localhost'
+DEFAULT_ETCD_PORT = 2379
 
 def publish_tasks(tasks_map):
     queue_conn = QConnection('amqp://{user}:{pass}@{host}:{port}'.format(
@@ -143,8 +145,8 @@ def main(config_cl):
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
     config_cl = ConfigClient(
-        host=os.environ.get('HX_ETCD_HOST'),
-        port=int(os.environ.get('HX_ETCD_PORT')),
+    host = os.environ.get('HX_ETCD_HOST'),
+    port= int(os.environ.get('HX_ETCD_PORT'))
     )
     config_cl.wait_configured()
     main(config_cl)

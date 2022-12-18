@@ -1,7 +1,6 @@
 import enum
 import json
 import uuid
-from sqlalchemy.ext.declarative.base import _declarative_constructor
 from datetime import datetime
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
 from sqlalchemy import (Column, String, Integer, Enum, ForeignKey)
@@ -43,7 +42,6 @@ class Base(object):
         for col in init_columns:
             setattr(self, col.name, kwargs.get(col.name))
             kwargs.pop(col.name, None)
-        _declarative_constructor(self, **kwargs)
 
     @declared_attr
     # pylint: disable=E0213

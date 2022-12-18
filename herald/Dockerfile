@@ -1,16 +1,8 @@
-FROM optscale_python:local
-MAINTAINER Hystax
+FROM python
 
 WORKDIR /usr/src/app/herald_server
 
-COPY requirements.txt .
-RUN apt-get update && apt-get install \
-    && apt-get install -y libsodium-dev libssl-dev sendmail \
-    && pip install --no-cache-dir -r /usr/src/app/herald_server/requirements.txt \
-    && apt-get remove -y libssl-dev \
-    && apt-get autoremove -y \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+ENV PYTHONPATH /usr/src/app/
 
 COPY herald_server/alembic ./alembic
 COPY herald_server/controllers ./controllers
@@ -21,7 +13,10 @@ COPY herald_server/worker ./worker
 COPY herald_server/*.py run.py ./
 COPY herald_server/alembic.template .
 COPY modules ../modules
+COPY auth_client ../auth_client
+COPY config_client ../config_client
+COPY optscale_exceptions ../optscale_exceptions
+COPY optscale_types ../optscale_types
 
-ENV PYTHONPATH /usr/src/app/
 CMD ["python", "-u", "run.py"]
 EXPOSE 8906

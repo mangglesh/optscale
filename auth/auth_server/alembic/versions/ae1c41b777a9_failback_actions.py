@@ -10,7 +10,6 @@ import uuid
 import string
 import random
 from sqlalchemy import Enum
-from sqlalchemy.ext.declarative.base import _declarative_constructor
 from alembic import op
 from datetime import datetime
 from sqlalchemy.ext.declarative import declarative_base, declared_attr

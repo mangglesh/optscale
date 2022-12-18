@@ -22,7 +22,7 @@ import * as serviceWorker from "serviceWorker";
 import configureStore from "store";
 import { intl } from "translations/react-intl-config";
 import { microsoftOAuthConfiguration } from "utils/integrations";
-import history from "./history";
+import history from "./browserHistory";
 
 const { store, persistor } = configureStore();
 

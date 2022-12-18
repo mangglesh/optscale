@@ -18,9 +18,9 @@ depends_on = None
 
 def upgrade():
     op.add_column('organization_constraint', sa.Column(
-        'last_run_result', sa.TEXT(), nullable=False, server_default='{}'))
+        'last_run_result', sa.TEXT(), nullable=False))
     op.add_column('organization_limit_hit', sa.Column(
-        'run_result', sa.TEXT(), nullable=False, server_default='{}'))
+        'run_result', sa.TEXT(), nullable=False))
 
 
 def downgrade():
