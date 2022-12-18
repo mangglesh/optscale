@@ -4,7 +4,7 @@ module.exports = (app) => {
   app.use(
     "/api/auth/*",
     createProxyMiddleware({
-      target: "http://10.128.0.2:8905",
+      target: "http://localhost:8905/",
       changeOrigin: true,
       secure: false,
       pathRewrite: {
@@ -15,7 +15,7 @@ module.exports = (app) => {
   app.use(
     '/api/restapi/*',
     createProxyMiddleware({
-      target: "http://10.128.0.2:8999",
+      target: "http://localhost:8999/",
       changeOrigin: true,
       pathRewrite: {
         "^/api": "/"

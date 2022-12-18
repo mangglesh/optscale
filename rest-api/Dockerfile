@@ -20,7 +20,7 @@ COPY rest_api_server/metroculus_client ./metroculus_client
 COPY rest_api_server/optscale_exceptions ./optscale_exceptions
 
 #COPY rest_api_server/recommendation_cleanup_scripts ./recommendation_cleanup_scripts
-RUN python -u write_spec.py
 
+RUN python -u write_spec.py
 CMD ["python", "-u","/usr/src/app/rest_api_server/server.py"]
 EXPOSE 8999

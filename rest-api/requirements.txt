@@ -15,3 +15,4 @@ pydevd-pycharm==201.5616.27
 cryptocode==0.1
 task-dispatcher==1.4.5
 pyyaml==5.3.1
+task-dispatcher==1.4.5
