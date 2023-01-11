@@ -767,6 +767,7 @@ class Aws(CloudBase):
                      search_criteria=None, **kwargs):
         res = []
         for r in self.cur.describe_report_definitions()['ReportDefinitions']:
+            LOG.info("Report defination {}".format(r))
             if name is None or (name and r['ReportName'] == name):
                 if search_criteria:
                     try:
