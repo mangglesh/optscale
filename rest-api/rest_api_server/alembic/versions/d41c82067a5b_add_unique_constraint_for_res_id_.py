@@ -30,7 +30,7 @@ def upgrade():
         [table_.c.resource_id, table_.c.created_at, table_.c.deleted_at,
          sa.func.count('*').label('cnt')]
     ).group_by(
-        table_.c.resource_id, table_.c.deleted_at
+        table_.c.resource_id, table_.c.deleted_at,table_.c.created_at
     ).alias('inner_stmt')
     outer_stmt = sa.select(
         [inner_stmt.c.resource_id, inner_stmt.c.created_at,

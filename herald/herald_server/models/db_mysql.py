@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 
 from herald_server.models.db_base import BaseDB
 from herald_server.models.migrator import Migrator
-
+from urllib.parse import quote_plus
 
 class MySQLDB(BaseDB):
     def _get_engine(self):
@@ -15,7 +15,6 @@ class MySQLDB(BaseDB):
             pool_size=25,
             max_overflow=10,
         )
-
     def create_schema(self):
         migrator = Migrator(self.engine)
         migrator.migrate_all()
