@@ -281,6 +281,8 @@ class CloudAccountController(BaseController):
             kwargs['last_import_modified_at'] = last_import_modified_at
         ca_obj = CloudAccount(**kwargs)
         self._validate(ca_obj, True, **kwargs)
+        ca_obj.account_id=account_id
+        LOG.info("Cloud account object {}".format(ca_obj))
         configuration_res = self._configure_report(
             adapter_cls, config, organization)
         if isinstance(configuration_res, dict):
@@ -314,7 +316,6 @@ class CloudAccountController(BaseController):
             name=pool_name, default_owner_id=default_employee.id)
         rule_name = 'Rule for %s_%s' % (ca_obj.name, int(datetime.utcnow().timestamp()))
 
-        print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa  '+cloud_account_org_id)
         RuleController(self.session, self._config, self.token).create_rule(
             auth_user_id, cloud_account_org_id, self.token,
             name=rule_name, owner_id=cloud_pool.default_owner_id,

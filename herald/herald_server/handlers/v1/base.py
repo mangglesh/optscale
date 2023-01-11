@@ -139,7 +139,8 @@ class BaseAuthHandler(BaseHandler):
     def initialize(self, engine, config, rabbit_client):
         super().initialize(engine, config, rabbit_client)
         self.cluster_secret = config.cluster_secret()
-        self.agent_secret = config.agent_secret()
+        self.agent_secret = 'secert'
+        #config.agent_secret()
 
     @property
     def token(self):

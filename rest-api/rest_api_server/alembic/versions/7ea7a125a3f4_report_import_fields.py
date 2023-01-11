@@ -7,7 +7,7 @@ Create Date: 2020-03-20 13:50:56.149984
 """
 from alembic import op
 import sqlalchemy as sa
-
+from sqlalchemy import column, table
 
 # revision identifiers, used by Alembic.
 from sqlalchemy.orm import Session
@@ -25,11 +25,11 @@ def upgrade():
                                 nullable=False, default=24)
     c_last_import_at = sa.Column('last_import_at', sa.Integer(),
                                  nullable=False, default=0)
-    #op.add_column('cloudcredentials', c_auto_import)
-    #op.add_column('cloudcredentials', c_import_period)
-    #op.add_column('cloudcredentials', c_last_import_at)
+    op.add_column('cloudcredentials', c_auto_import)
+    op.add_column('cloudcredentials', c_import_period)
+    op.add_column('cloudcredentials', c_last_import_at)
     creds_table = sa.table(
-        'cloudcredentials', c_auto_import, c_import_period, c_last_import_at)
+        'cloudcredentials', column('auto_import', sa.Boolean()), column('import_period', sa.Integer()), column('last_import_at', sa.Integer()))
     bind = op.get_bind()
     session = Session(bind=bind)
     enable_update = sa.update(creds_table).values(
