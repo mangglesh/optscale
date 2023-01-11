@@ -2,6 +2,15 @@ version: '3.3'
 networks:
   nuchbee:
 services:
+  clickhouse:
+    image: docker.io/bitnami/clickhouse:22
+    environment:
+      - CLICKHOUSE_ADMIN_PASSWORD=password123
+    ports:
+      - '8123:8123'
+      - '9000:9000'
+    volumes:
+      - clickhouse_data:/bitnami/clickhouse
   rest-api-server:
     networks:
       - nuchbee
@@ -10,9 +19,9 @@ services:
     ports:
       - "8999:8999"
     environment:
-      - HX_ETCD_HOST=host.docker.internal
+      - HX_ETCD_HOST=10.128.0.2
       - HX_ETCD_PORT=2379
-    image: rest-api-server
+    build: rest-api/.
   auth:
     networks:
       - nuchbee
@@ -21,80 +30,72 @@ services:
     ports:
       - "8905:8905"
     environment:
-      - HX_ETCD_HOST=host.docker.internal
+      - HX_ETCD_HOST=10.128.0.2
       - HX_ETCD_PORT=2379
-    image: auth
+    build: auth/.
   bumi_scheduler:
     networks:
       - nuchbee
     container_name: bumi_scheduler
     restart: always
     environment:
-      - HX_ETCD_HOST=host.docker.internal
+      - HX_ETCD_HOST=10.128.0.2
       - HX_ETCD_PORT=2379
-    image: bumi_scheduler
-    depends_on:
-      - rest-api-server
+    build: bumi_scheduler/.
   bumi_worker:
     networks:
       - nuchbee
     container_name: bumi_worker
     restart: always
     environment:
-      - HX_ETCD_HOST=host.docker.internal
+      - HX_ETCD_HOST=10.128.0.2
       - HX_ETCD_PORT=2379
-    image: bumi_worker
-    depends_on:
-      - bumi_scheduler
+    build: bumi_worker/.
   diworker:
     networks:
       - nuchbee
     container_name: diworker
     restart: always
     environment:
-      - HX_ETCD_HOST=host.docker.internal
+      - HX_ETCD_HOST=10.128.0.2
       - HX_ETCD_PORT=2379
-    image: diworker
+    build: diworker/.
     depends_on:
-      - rest-api-server
+      - clickhouse
   herald_server_engine:
     networks:
       - nuchbee
     container_name: herald_server_engine
     restart: always
-    ports:
-      - "8906:8906"
     environment:
-      - HX_ETCD_HOST=host.docker.internal
+      - HX_ETCD_HOST=10.128.0.2
       - HX_ETCD_PORT=2379
       - HERALD_SERVICE=engine
-    image: herald_server
-    depends_on:
-      - rest-api-server
+    build: herald/.
   herald_server_api:
     networks:
       - nuchbee
     container_name: herald_server_api
     restart: always
+    ports:
+      - "8906:8906"
     environment:
-      - HX_ETCD_HOST=host.docker.internal
+      - HX_ETCD_HOST=10.128.0.2
       - HX_ETCD_PORT=2379
       - HERALD_SERVICE=api
-    image: herald_server
-    depends_on:
-      - rest-api-server
+    build: herald/.
   katara_service_scheduler:
     networks:
       - nuchbee
     container_name: katara_service_scheduler
     restart: always
     environment:
-      - HX_ETCD_HOST=host.docker.internal
+      - HX_ETCD_HOST=10.128.0.2
       - HX_ETCD_PORT=2379
       - HX_KATARA_ROLE=scheduler
-    image: katara_service
-    depends_on:
-      - rest-api-server
+    build: 
+      context: katara/.
+      dockerfile: Dockerfile_service
   katara_service_api:
     networks:
       - nuchbee
@@ -103,10 +104,12 @@ services:
     ports:
       - "8935:8935"
     environment:
-      - HX_ETCD_HOST=host.docker.internal
+      - HX_ETCD_HOST=10.128.0.2
       - HX_ETCD_PORT=2379
       - HX_KATARA_ROLE=api
-    image: katara_service
+    build:
+      context: katara/.
+      dockerfile: Dockerfile_service
     depends_on:
       - rest-api-server
   katara_worker:
@@ -115,21 +118,23 @@ services:
     container_name: katara_worker
     restart: always
     environment:
-      - HX_ETCD_HOST=host.docker.internal
+      - HX_ETCD_HOST=10.128.0.2
       - HX_ETCD_PORT=2379
       - HX_KATARA_ROLE=scheduler
-    image: katara_worker
+    build: 
+      context: katara/.
+      dockerfile: Dockerfile_worker
     depends_on:
-      - katara_service
+      - katara_service_scheduler
   resource_discovery_scheduler:
       networks:
         - nuchbee
       container_name: resource_discovery_scheduler
       restart: always
       environment:
-        - HX_ETCD_HOST=host.docker.internal
+        - HX_ETCD_HOST=10.128.0.2
         - HX_ETCD_PORT=2379
-      image: resource_discovery_scheduler
+      build: deploy/docker_images/resource_discovery/.
       depends_on:
         - rest-api-server
   resource_discovery_worker:
@@ -138,9 +143,11 @@ services:
       container_name: resource_discovery_worker
       restart: always
       environment:
-        - HX_ETCD_HOST=host.docker.internal
+        - HX_ETCD_HOST=10.128.0.2
         - HX_ETCD_PORT=2379
-      image: resource_discovery_worker
+      build: 
+        context: deploy/docker_images/resource_discovery/.
+        dockerfile: Dockerfile_worker
       depends_on:
         - resource_discovery_scheduler
   metroculus_api:
@@ -151,9 +158,11 @@ services:
     ports:
       - "8969:8969"
     environment:
-      - HX_ETCD_HOST=host.docker.internal
+      - HX_ETCD_HOST=10.128.0.2
       - HX_ETCD_PORT=2379
-    image: metroculus_api
+    build : 
+      context: metroculus/.
+      dockerfile: metroculus_api/Dockerfile
     depends_on:
       - rest-api-server
   metroculus_scheduler:
@@ -162,9 +171,11 @@ services:
     container_name: metroculus_scheduler
     restart: always
     environment:
-      - HX_ETCD_HOST=host.docker.internal
+      - HX_ETCD_HOST=10.128.0.2
       - HX_ETCD_PORT=2379
-    image: metroculus_scheduler
+    build: 
+      context: metroculus/.
+      dockerfile: metroculus_scheduler/Dockerfile
     depends_on:
       - metroculus_api
   metroculus_worker:
@@ -173,9 +184,11 @@ services:
     container_name: metroculus_worker
     restart: always
     environment:
-      - HX_ETCD_HOST=host.docker.internal
+      - HX_ETCD_HOST=10.128.0.2
       - HX_ETCD_PORT=2379
-    image: metroculus_worker
+    build: 
+      context: metroculus/.
+      dockerfile: metroculus_worker/Dockerfile
     depends_on:
       - metroculus_scheduler
   insider_api:
@@ -186,9 +199,11 @@ services:
     ports:
       - "8945:8945"
     environment:
-      - HX_ETCD_HOST=host.docker.internal
+      - HX_ETCD_HOST=10.128.0.2
       - HX_ETCD_PORT=2379
-    image: insider_api
+    build: 
+      context: insider/.
+      dockerfile: insider_api/Dockerfile
     depends_on:
       - rest-api-server
   insider_scheduler:
@@ -197,9 +212,11 @@ services:
     container_name: insider_scheduler
     restart: always
     environment:
-      - HX_ETCD_HOST=host.docker.internal
+      - HX_ETCD_HOST=10.128.0.2
       - HX_ETCD_PORT=2379
-    image: insider_scheduler
+    build: 
+      context: insider/. 
+      dockerfile: insider_scheduler/Dockerfile
     depends_on:
       - insider_api
   insider_worker:
@@ -208,9 +225,11 @@ services:
     container_name: insider_worker
     restart: always
     environment:
-      - HX_ETCD_HOST=host.docker.internal
+      - HX_ETCD_HOST=10.28.0.2
       - HX_ETCD_PORT=2379
-    image: insider_worker
+    build: 
+      context: insider/.
+      dockerfile: insider_worker/Dockerfile
     depends_on:
       - insider_scheduler
   trapper_scheduler:
@@ -219,9 +238,11 @@ services:
     container_name: trapper_scheduler
     restart: always
     environment:
-      - HX_ETCD_HOST=host.docker.internal
+      - HX_ETCD_HOST=10.128.0.2
       - HX_ETCD_PORT=2379
-    image: trapper_scheduler
+    build: 
+      context: trapper/.
+      dockerfile: trapper_scheduler/Dockerfile
     depends_on:
       - rest-api-server
   trapper_worker:
@@ -230,30 +251,13 @@ services:
     container_name: trapper_worker
     restart: always
     environment:
-      - HX_ETCD_HOST=host.docker.internal
+      - HX_ETCD_HOST=10.128.0.2
       - HX_ETCD_PORT=2379
-    image: trapper_worker
+    build: 
+      context: trapper/.
+      dockerfile: trapper_worker/Dockerfile
     depends_on:
       - trapper_scheduler
-  resource_observer_scheduler:
-      networks:
-        - nuchbee
-      container_name: resource_observer_scheduler
-      restart: always
-      environment:
-        - HX_ETCD_HOST=host.docker.internal
-        - HX_ETCD_PORT=2379
-      image: resource_observer_scheduler
-      depends_on:
-        - rest-api-server
-  resource_observer_worker:
-      networks:
-        - nuchbee
-      container_name: resource_observer_worker
-      restart: always
-      environment:
-        - HX_ETCD_HOST=host.docker.internal
-        - HX_ETCD_PORT=2379
-      image: resource_observer_worker
-      depends_on:
-        - resource_observer_scheduler
+volumes:
+  clickhouse_data:
+    driver: local
