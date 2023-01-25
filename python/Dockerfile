@@ -1,7 +1,7 @@
-FROM python:3.8-slim
+FROM --platform=linux/amd64 python:3.8-slim
 COPY requirements.txt ./requirements.txt
 
-RUN apt-get update && apt-get install -y libsodium-dev \
+RUN apt-get update && apt-get install -y libsodium-dev gcc\
     && pip install --use-deprecated=legacy-resolver --no-cache-dir -r requirements.txt \
     && apt-get autoremove -y \
     && apt-get clean \
