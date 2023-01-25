@@ -1,9 +1,15 @@
 """"initial"
+<<<<<<< HEAD
 
 Revision ID: 5a121c63e3f2
 Revises: 
 Create Date: 2022-11-22 09:20:25.346835
 
+=======
+Revision ID: 5a121c63e3f2
+Revises: 
+Create Date: 2022-11-22 09:20:25.346835
+>>>>>>> 954b751 (fix for migration)
 """
 from alembic import op
 import sqlalchemy as sa
