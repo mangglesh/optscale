@@ -1,0 +1,56 @@
+bhumi_task
+
+consumer:- bhumi worker
+producer: not known
+body
+{
+    "state":"" current state name starts with created.
+    "organization_id": organization id.
+    "created_at": 
+    "checklist_id": 
+    "organization_id": 
+    "state": 
+    "task_timeout": 
+    "max_retries": 
+}
+
+
+
+extra atributes
+{
+    "module": module which will get executed for organisation.
+    "module_type": folder path which is "recomendation" by default.
+    "children_count": number of module which will be executed for organisation.
+
+}
+-----------------------------------------------------------------------------------------------------------------------
+metroculus-task
+
+consumer:- metroculus worker
+producer:- not known
+
+body
+{
+    "cloud_account_id": cloud account ID of the account you want matrix for.
+}
+
+cloud_account_id:- cloud id for which we want to generate the matrics data
+
+--------------------------------------------------------------------------------------------------------------------------
+events_task
+
+queue name is defined in events key events_queue in etcd
+consumer:- harald worker
+producer:- katara_worker
+
+body
+{
+    "reaction_type":EMAIL,SMS,HTTP_CALLBACK
+    "template_type": template which email wants. the template file should be present in herald/modules/email_generator/templates
+    "download_url": bucket link to download report. (uploaded by karata worker)
+    "email": list of email ids to sent email to.
+    "subject": subject of the mail.
+    "template_params": parameters to fill templates.
+    "reply_to_email": email of the mail you want to get reply on.
+
+}
