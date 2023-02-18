@@ -1,2 +1,0 @@
-Hystax Katara client package
-====================================

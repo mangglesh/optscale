@@ -1,4 +1,4 @@
-FROM python
+FROM --platform=linux/amd64 python
 WORKDIR /src
 
 COPY scheduler.py worker.py ./

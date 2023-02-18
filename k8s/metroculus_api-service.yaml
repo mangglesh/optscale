@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: metroculus-api
+  name: metroculus-api
+spec:
+  ports:
+    - name: "8969"
+      port: 8969
+      targetPort: 8969
+  selector:
+    io.kompose.service: metroculus-api
+status:
+  loadBalancer: {}

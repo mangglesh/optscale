@@ -20,7 +20,7 @@ LOG = get_logger(__name__)
 
 MAX_RETRIES = 10
 MAX_UPDATE_THRESHOLD = 60 * 60
-BUCKET_NAME = 'pollux-rera-crawler'
+BUCKET_NAME = 'nudgebee-reports'
 
 
 class KataraTaskTimeoutError(Exception):

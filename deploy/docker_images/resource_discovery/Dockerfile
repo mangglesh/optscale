@@ -1,10 +1,7 @@
-FROM python
+FROM --platform=linux/amd64 python
 
-WORKDIR /src
-ENV PYTHONPATH=/src
+WORKDIR /usr/src/app/
+ENV PYTHONPATH=/usr/src/app/
 
 COPY scheduler.py worker.py ./
-COPY cloud_adapter ./cloud_adapter
-COPY config_client ./config_client
-COPY rest_api_client ./rest_api_client
-CMD ["python", "-u", "/src/scheduler.py"]
+CMD ["python", "-u", "/usr/src/app/scheduler.py"]

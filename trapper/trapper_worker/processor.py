@@ -32,7 +32,7 @@ class BaseTrafficExpenseProcessor:
     def mongo_cl(self):
         if not self._mongo_cl:
             mongo_params = self.config_cl.mongo_params()
-            mongo_conn_string = "mongodb://%s:%s@%s:%s" % mongo_params[:-1]
+            mongo_conn_string = "mongodb+srv://%s:%s@%s" % mongo_params[:-2]
             self._mongo_cl = MongoClient(mongo_conn_string)
         return self._mongo_cl
 

@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: rest-api-server
+  name: rest-api-server
+spec:
+  ports:
+    - name: "8999"
+      port: 8999
+      targetPort: 8999
+  selector:
+    io.kompose.service: rest-api-server
+status:
+  loadBalancer: {}

@@ -1,2 +1,0 @@
-Hystax Insider client package
-=============================

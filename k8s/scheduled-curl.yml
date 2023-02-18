@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: cost-report-schedule-import
+spec:
+  schedule: "0 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: cost-report-schedule-import
+            image: busybox:1.28
+            imagePullPolicy: IfNotPresent
+            command:
+            - /bin/sh
+            - -c
+            - | 
+              date; wget 'http://ngui.optscale.svc.cluster.local:3000/api/restapi/v2/schedule_imports' --header='Secret: mysecretkey' --post-data '{"period":1}'
+          restartPolicy: OnFailure

@@ -135,7 +135,9 @@ class BaseHandler(tornado.web.RequestHandler):
     def _request_body(self):
         try:
             return json.loads(self.request.body.decode('utf-8'))
-        except JSONDecodeError:
+        except JSONDecodeError as exec:
+            logging.exception(exec)
+            logging.error("Failed to parse %s ", self.request.body.decode('utf-8'))
             raise OptHTTPError(400, Err.OE0233, [])
 
     def _request_arguments(self):
@@ -251,8 +253,6 @@ class BaseAuthHandler(BaseHandler):
         return self._check_secret(self.cluster_secret, **kwargs)
 
     def _check_secret(self, secret, raises=True):
-        print(self.secret)
-        print(secret)
         if raises and not self.secret == secret:
             raise OptHTTPError(403, Err.OE0236, [])
         else:
@@ -284,7 +284,6 @@ class BaseAuthHandler(BaseHandler):
         return token_meta_dict
 
     def get_meta_by_token(self, token):
-        print(2)
         user_digest = list(map(
             lambda x: hashlib.md5(x.encode('utf-8')).hexdigest(), [token]))[0]
         token_meta = self.get_token_meta([user_digest]).get(user_digest, {})

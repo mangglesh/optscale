@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: herald-server-api
+  name: herald-server-api
+spec:
+  ports:
+    - name: "8906"
+      port: 8906
+      targetPort: 8906
+  selector:
+    io.kompose.service: herald-server-api
+status:
+  loadBalancer: {}
