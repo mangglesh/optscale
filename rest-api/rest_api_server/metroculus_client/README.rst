@@ -1,2 +1,0 @@
-Hystax Metroculus client package
-================================

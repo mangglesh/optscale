@@ -159,7 +159,7 @@ class ExpensesRecalculationScheduleController(ReportImportBaseController):
 
 
 class ReportImportFileController(ReportImportBaseController):
-    BUCKET_NAME = 'pollux-rera-crawler'
+    BUCKET_NAME = 'nudgebee-reports'
     MAX_BUFFER_SIZE = 5 * 1024 * 1024
 
     def __init__(self, *args, **kwargs):

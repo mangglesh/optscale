@@ -2,15 +2,6 @@ version: '3.3'
 networks:
   nuchbee:
 services:
-  clickhouse:
-    image: docker.io/bitnami/clickhouse:22
-    environment:
-      - CLICKHOUSE_ADMIN_PASSWORD=password123
-    ports:
-      - '8123:8123'
-      - '9000:9000'
-    volumes:
-      - clickhouse_data:/bitnami/clickhouse
   rest-api-server:
     networks:
       - nuchbee
@@ -22,6 +13,7 @@ services:
       - HX_ETCD_HOST=10.128.0.2
       - HX_ETCD_PORT=2379
     build: rest-api/.
+    image: 280501305789.dkr.ecr.us-east-1.amazonaws.com/optscale-rest-api-server:latest
   auth:
     networks:
       - nuchbee
@@ -33,6 +25,9 @@ services:
       - HX_ETCD_HOST=10.128.0.2
       - HX_ETCD_PORT=2379
     build: auth/.
+    image: 280501305789.dkr.ecr.us-east-1.amazonaws.com/optscale-auth:latest
+    depends_on:
+      - rest-api-server
   bumi_scheduler:
     networks:
       - nuchbee
@@ -42,6 +37,9 @@ services:
       - HX_ETCD_HOST=10.128.0.2
       - HX_ETCD_PORT=2379
     build: bumi_scheduler/.
+    image: 280501305789.dkr.ecr.us-east-1.amazonaws.com/optscale-bumi_scheduler:latest
+    depends_on:
+      - auth
   bumi_worker:
     networks:
       - nuchbee
@@ -51,6 +49,9 @@ services:
       - HX_ETCD_HOST=10.128.0.2
       - HX_ETCD_PORT=2379
     build: bumi_worker/.
+    image: 280501305789.dkr.ecr.us-east-1.amazonaws.com/optscale-bumi_worker:latest
+    depends_on:
+      - auth
   diworker:
     networks:
       - nuchbee
@@ -60,8 +61,7 @@ services:
       - HX_ETCD_HOST=10.128.0.2
       - HX_ETCD_PORT=2379
     build: diworker/.
-    depends_on:
-      - clickhouse
+    image: 2280501305789.dkr.ecr.us-east-1.amazonaws.com/optscale-diworker:latest
   herald_server_engine:
     networks:
       - nuchbee
@@ -72,6 +72,7 @@ services:
       - HX_ETCD_PORT=2379
       - HERALD_SERVICE=engine
     build: herald/.
+    image: 280501305789.dkr.ecr.us-east-1.amazonaws.com/optscale-herald_server_engine:latest
   herald_server_api:
     networks:
       - nuchbee
@@ -84,6 +85,7 @@ services:
       - HX_ETCD_PORT=2379
       - HERALD_SERVICE=api
     build: herald/.
+    image: 280501305789.dkr.ecr.us-east-1.amazonaws.com/optscale-herald_server_api:latest
   katara_service_scheduler:
     networks:
       - nuchbee
@@ -96,6 +98,7 @@ services:
     build: 
       context: katara/.
       dockerfile: Dockerfile_service
+    image: 280501305789.dkr.ecr.us-east-1.amazonaws.com/optscale-katara_service_scheduler:latest
   katara_service_api:
     networks:
       - nuchbee
@@ -110,6 +113,7 @@ services:
     build:
       context: katara/.
       dockerfile: Dockerfile_service
+    image: 280501305789.dkr.ecr.us-east-1.amazonaws.com/optscale-katara_service_api:latest
     depends_on:
       - rest-api-server
   katara_worker:
@@ -124,6 +128,7 @@ services:
     build: 
       context: katara/.
       dockerfile: Dockerfile_worker
+    image: 280501305789.dkr.ecr.us-east-1.amazonaws.com/optscale-katara_worker:latest
     depends_on:
       - katara_service_scheduler
   resource_discovery_scheduler:
@@ -135,6 +140,7 @@ services:
         - HX_ETCD_HOST=10.128.0.2
         - HX_ETCD_PORT=2379
       build: deploy/docker_images/resource_discovery/.
+      image: 280501305789.dkr.ecr.us-east-1.amazonaws.com/optscale-resource_discovery_scheduler:latest
       depends_on:
         - rest-api-server
   resource_discovery_worker:
@@ -148,6 +154,7 @@ services:
       build: 
         context: deploy/docker_images/resource_discovery/.
         dockerfile: Dockerfile_worker
+      image: 2280501305789.dkr.ecr.us-east-1.amazonaws.com/optscale-resource_discovery_worker:latest
       depends_on:
         - resource_discovery_scheduler
   metroculus_api:
@@ -163,6 +170,7 @@ services:
     build : 
       context: metroculus/.
       dockerfile: metroculus_api/Dockerfile
+    image: 280501305789.dkr.ecr.us-east-1.amazonaws.com/optscale-metroculus_api:latest
     depends_on:
       - rest-api-server
   metroculus_scheduler:
@@ -176,6 +184,7 @@ services:
     build: 
       context: metroculus/.
       dockerfile: metroculus_scheduler/Dockerfile
+    image: 280501305789.dkr.ecr.us-east-1.amazonaws.com/optscale-metroculus_scheduler:latest
     depends_on:
       - metroculus_api
   metroculus_worker:
@@ -189,6 +198,7 @@ services:
     build: 
       context: metroculus/.
       dockerfile: metroculus_worker/Dockerfile
+    image: 280501305789.dkr.ecr.us-east-1.amazonaws.com/optscale-metroculus_worker:latest
     depends_on:
       - metroculus_scheduler
   insider_api:
@@ -204,6 +214,7 @@ services:
     build: 
       context: insider/.
       dockerfile: insider_api/Dockerfile
+    image: 280501305789.dkr.ecr.us-east-1.amazonaws.com/optscale-insider_api:latest
     depends_on:
       - rest-api-server
   insider_scheduler:
@@ -217,6 +228,7 @@ services:
     build: 
       context: insider/. 
       dockerfile: insider_scheduler/Dockerfile
+    image: 280501305789.dkr.ecr.us-east-1.amazonaws.com/optscale-insider_scheduler:latest
     depends_on:
       - insider_api
   insider_worker:
@@ -230,6 +242,7 @@ services:
     build: 
       context: insider/.
       dockerfile: insider_worker/Dockerfile
+    image: 280501305789.dkr.ecr.us-east-1.amazonaws.com/optscale-insider_worker:latest
     depends_on:
       - insider_scheduler
   trapper_scheduler:
@@ -243,6 +256,7 @@ services:
     build: 
       context: trapper/.
       dockerfile: trapper_scheduler/Dockerfile
+    image: 280501305789.dkr.ecr.us-east-1.amazonaws.com/optscale-trapper_scheduler:latest
     depends_on:
       - rest-api-server
   trapper_worker:
@@ -256,6 +270,7 @@ services:
     build: 
       context: trapper/.
       dockerfile: trapper_worker/Dockerfile
+    image: 280501305789.dkr.ecr.us-east-1.amazonaws.com/optscale-trapper_worker:latest
     depends_on:
       - trapper_scheduler
 volumes:

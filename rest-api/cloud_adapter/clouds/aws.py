@@ -110,7 +110,8 @@ class Aws(CloudBase):
             SnapshotResource: self.snapshot_discovery_calls,
             IpAddressResource: self.ip_address_discovery_calls,
             ImageResource: self.image_discovery_calls,
-            BucketResource: self.bucket_discovery_calls
+            BucketResource: self.bucket_discovery_calls,
+            RdsInstanceResource: self.rds_instance_discovery_calls
         }
 
     def get_session(self):
@@ -379,6 +380,42 @@ class Aws(CloudBase):
                 self._set_cloud_link(snapshot_resource, region)
                 yield snapshot_resource
 
+
+    def rds_instance_discovery_calls(self):
+        return [(self.rds_instance_region_discovery_calls, (r,))
+                for r in self.list_regions()]
+
+    def rds_instance_region_discovery_calls(self, region):
+        account_id = self.validate_credentials()['account_id']
+        rds = self.session.client('rds', region)
+        MAX_RECORDS = 100
+        next_token = None
+        first_iteration = True
+        while next_token or first_iteration:
+            params = {'MaxRecords': MAX_RECORDS}
+            if next_token:
+                params['Marker'] = next_token
+            first_iteration = False
+            described = rds.describe_db_instances(**params)
+            next_token = described.get('Marker')
+            for db in described['DBInstances']:
+                rds_resource = RdsInstanceResource( 
+                    cloud_resource_id = db["DBInstanceArn"],
+                    name = db['DBInstanceIdentifier'],
+                    zone_id = db['Endpoint']['HostedZoneId'],
+                    engine = db['Engine'],
+                    engine_version = db['EngineVersion'],
+                    storage_type = db['StorageType'],
+                    cloud_created_at = int(db['InstanceCreateTime'].timestamp()),
+                    cloud_account_id=self.cloud_account_id,
+                    region=region,
+                    organization_id=self.organization_id,
+                    tags=self._extract_tags(db, "TagList")
+                )
+                LOG.info(rds_resource)
+                self._set_cloud_link(rds_resource, region)
+                yield rds_resource
+    
     def snapshot_discovery_calls(self):
         """
         Returns list of discovery calls to discover snapshots presented
@@ -1268,11 +1305,22 @@ class Aws(CloudBase):
             for instance_id in instance_ids:
                 session = self.get_session()
                 cloudwatch = session.client('cloudwatch', region_name=region)
-                params = {
-                    'Dimensions': [{
+                dimension = [{
                         'Name': 'InstanceId',
                         'Value': instance_id
-                    }],
+                    }]
+                
+                if namespace == "AWS/S3":
+                    dimension = [{
+                        'Name': 'BucketName',
+                        'Value': instance_id
+                    },
+                    {
+                        'Name': 'StorageType', 
+                        'Value': 'StandardStorage'
+                    }]
+                params = {
+                    'Dimensions': dimension,
                     'MetricName': metric_name,
                     'Namespace': namespace,
                     'StartTime': start_date,
@@ -1280,11 +1328,15 @@ class Aws(CloudBase):
                     'Period': interval,
                     'Statistics': ['Average'],
                 }
+                LOG.info("Fetching metrics using params {}".format(params))
                 futures_map[instance_id] = executor.submit(
                     self._retry, cloudwatch.get_metric_statistics, **params)
             for instance_id, f in futures_map.items():
-                stats = f.result()['Datapoints']
+                out = f.result()
+                LOG.info("Fetched metrics for instanceId {} , metrics {} ".format(instance_id, out) )
+                stats = out['Datapoints']
                 result[instance_id] = stats
+            
         return result
 
     def get_reserved_instances_offerings(self, pd, tenancy, flavor,
