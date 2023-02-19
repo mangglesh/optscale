@@ -2,7 +2,7 @@
 set -e
 
 
-#bash deploy/packages/deploy.sh deploy/config_client $1
+bash deploy/packages/deploy.sh deploy/config_client $1
 bash deploy/packages/deploy.sh rest-api/rest_api_client $1
 bash deploy/packages/deploy.sh rest-api/optscale_exceptions $1
 bash deploy/packages/deploy.sh rest-api/cloud_adapter $1
