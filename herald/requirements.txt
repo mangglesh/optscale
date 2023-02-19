@@ -1,12 +1,12 @@
 SQLAlchemy==1.1.4
-config-client==1.2.0
+config-client==1.0.135
 tornado==6.2
 requests==2.25.0
 optscale-exceptions==0.0.23
 alembic==0.8.9
-auth-client==0.0.75
+auth-client==0.0.82
 pika==1.1.0
-mysql-connector==2.1.4
+mysql-connector==2.2.9
 pystache==0.5.4
 optscale-types==0.0.8
 boto3==1.12.25

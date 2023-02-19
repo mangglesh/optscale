@@ -1,8 +1,8 @@
-restapi-client==1.0.581
-auth-client==0.0.79
+rest-api-client==1.0.687
+auth-client==0.0.82
 tornado==6.2
-config_client==1.0.100
-optscale_exceptions==0.0.21
+config_client==1.0.135
+optscale_exceptions==0.0.23
 sqlalchemy==1.4.23
 alembic==1.7.1
 mysql-connector==2.2.9
