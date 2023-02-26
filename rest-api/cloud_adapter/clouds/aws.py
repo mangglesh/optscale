@@ -412,7 +412,6 @@ class Aws(CloudBase):
                     organization_id=self.organization_id,
                     tags=self._extract_tags(db, "TagList")
                 )
-                LOG.info(rds_resource)
                 self._set_cloud_link(rds_resource, region)
                 yield rds_resource
     
@@ -527,9 +526,6 @@ class Aws(CloudBase):
         return []
 
     def snapshot_chain_discovery_calls(self):
-        return []
-
-    def rds_instance_discovery_calls(self):
         return []
 
     def discover_region_ip_addresses(self, region):
@@ -1318,6 +1314,11 @@ class Aws(CloudBase):
                     {
                         'Name': 'StorageType', 
                         'Value': 'StandardStorage'
+                    }]
+                if namespace == "AWS/RDS":
+                    dimension = [{
+                        'Name': 'DBInstanceIdentifier',
+                        'Value': instance_id.rsplit(":", 1)[-1]
                     }]
                 params = {
                     'Dimensions': dimension,

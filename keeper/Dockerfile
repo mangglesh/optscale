@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 python
+FROM --platform=linux/amd64 optscale-python:latest
 MAINTAINER Hystax
 
 WORKDIR /usr/src/app/report_server

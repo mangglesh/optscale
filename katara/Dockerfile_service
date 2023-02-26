@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 python
+FROM --platform=linux/amd64 optscale-python:latest
 
 WORKDIR /usr/src/app/katara_service
 ENV PYTHONPATH /usr/src/app/

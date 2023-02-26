@@ -258,6 +258,13 @@ class MetricsProcessor(object):
                 'bucket_size_bytes': ('AWS/S3', 'BucketSizeBytes'),
                 'number_of_objects': ('AWS/S3', 'NumberOfObjects')
             }
+        if r_type == "RDS Instance":
+            default_metrics = {
+                'cpu': ('AWS/RDS', 'CPUUtilization'),
+                'network_out_io': ('AWS/RDS', 'NetworkReceiveThroughput'),
+                'network_in_io': ('AWS/RDS', 'NetworkTransmitThroughput'),
+                'db_connections': ('AWS/RDS', 'DatabaseConnections')
+            }
         for name, (cloud_metric_namespace, cloud_metric_name) in default_metrics.items():
             last_start_date = start_date
             while last_start_date < end_date:
@@ -270,14 +277,13 @@ class MetricsProcessor(object):
                     last_start_date, end_dt)
                 for cloud_resource_id, metrics in response.items():
                     for metric in metrics:
-                        LOG.info("fetched metrics {}, metric name cloud_metric_name {} , resource id {}".format(metric, cloud_metric_name, cloud_account_id))
                         if 'Average' not in metric:
                             continue
                         value = metric.get('Average')
                         # if not value does not fit, 0 is valid value
                         if value is None:
                             continue
-                        if name in ['network_in_io', 'network_out_io']:
+                        if name in ['network_in_io', 'network_out_io'] and r_type != "RDS Instance":
                             # change bytes per min to bytes per second
                             value = value / 60
                         result.append({

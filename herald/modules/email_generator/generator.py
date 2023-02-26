@@ -61,7 +61,7 @@ def _generate_context(template_params, config_client):
 
 def generate_email(config_client, to, subject, template_params,
                    template_type=None, reply_to_email=None,
-                   frm='noreply@hystax.com'):
+                   frm='mangglesh.dagar@pollux.in'):
     msg = MIMEMultipart('related')
     msg['Subject'] = subject
     msg['From'] = frm
