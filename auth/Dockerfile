@@ -1,4 +1,4 @@
-FROM python
+FROM --platform=linux/amd64 optscale-python:latest
 
 WORKDIR /usr/src/app/auth_server
 ENV PYTHONPATH /usr/src/app/
@@ -11,9 +11,6 @@ COPY auth_server/models ./models
 COPY auth_server/*.py ./
 COPY auth_server/alembic.template .
 COPY auth_server/swagger ./swagger
-COPY auth_server/config_client ./config_client
-COPY auth_server/rest_api_client ./rest_api_client
-COPY auth_server/optscale_exceptions ./optscale_exceptions
 COPY auth_server/zoho_integrator ./zoho_integrator
 
 RUN python -u write_spec.py

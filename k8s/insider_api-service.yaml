@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: insider-api
+  name: insider-api
+spec:
+  ports:
+    - name: "8945"
+      port: 8945
+      targetPort: 8945
+  selector:
+    io.kompose.service: insider-api
+status:
+  loadBalancer: {}

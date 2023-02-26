@@ -1,4 +1,4 @@
 tornado==6.2
-config-client==1.0.78
+config-client==1.0.135
 kombu==4.6.8
-restapi_client==1.0.390
+rest-api-client==1.0.687

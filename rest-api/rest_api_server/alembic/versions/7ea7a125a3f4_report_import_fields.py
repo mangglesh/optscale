@@ -30,6 +30,10 @@ def upgrade():
     op.add_column('cloudcredentials', c_last_import_at)
     creds_table = sa.table(
         'cloudcredentials', column('auto_import', sa.Boolean()), column('import_period', sa.Integer()), column('last_import_at', sa.Integer()))
+<<<<<<< HEAD
+
+=======
+>>>>>>> 79469eb (deployment fix)
     bind = op.get_bind()
     session = Session(bind=bind)
     enable_update = sa.update(creds_table).values(

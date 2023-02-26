@@ -460,3 +460,11 @@ class Client(etcd.Client):
         Salt for encode user information
         """
         return self.get("/encryption_salt").value
+    
+    def smtp_params(self):
+        """
+        Salt for encode user information
+        """
+        params = self.read_branch('/smtp')
+        return (params['server'], params['port'], params['email'],
+                params['password'],params['from_email'] )
