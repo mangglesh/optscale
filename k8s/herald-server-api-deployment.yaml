@@ -32,7 +32,7 @@ spec:
               value: "optscale-etcd.optscale.svc.cluster.local"
             - name: HX_ETCD_PORT
               value: "2379"
-          image: 280501305789.dkr.ecr.us-east-1.amazonaws.com/optscale-insider_api:latest
+          image: 280501305789.dkr.ecr.us-east-1.amazonaws.com/optscale-herald_server_api:latest
           name: herald-server-api
           ports:
             - containerPort: 8906

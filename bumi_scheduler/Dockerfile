@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 python
+FROM --platform=linux/amd64 optscale-python:latest
 
 ENV PYTHONPATH /usr/src/app/
 WORKDIR /usr/src/app/bumi_scheduler

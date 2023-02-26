@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 python
+FROM --platform=linux/amd64 optscale-python:latest
 
 WORKDIR /usr/src/app/insider_api
 ENV PYTHONPATH /usr/src/app/
