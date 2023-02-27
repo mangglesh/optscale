@@ -9,3 +9,7 @@ __pycache__/
 venv/
 .vscode/
 .DS_Store
+*.code-workspace
+
+*.egg-info
+dist

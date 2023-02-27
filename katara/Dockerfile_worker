@@ -1,11 +1,7 @@
-FROM python
+FROM --platform=linux/amd64 optscale-python:latest
 WORKDIR /usr/src/app/katara_worker
 ENV PYTHONPATH=/usr/src/app/
 
 COPY katara_worker/reports_generators ./reports_generators
 COPY katara_worker/*.py ./
-COPY katara_worker/auth_client ./auth_client
-COPY katara_worker/katara_client ./katara_client
-COPY katara_worker/rest_api_client ./rest_api_client
-COPY katara_worker/config_client ./config_client
 CMD ["python", "-u","/usr/src/app/katara_worker/main.py"]

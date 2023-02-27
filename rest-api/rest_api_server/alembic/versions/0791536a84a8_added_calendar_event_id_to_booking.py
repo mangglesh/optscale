@@ -93,8 +93,6 @@ def upgrade():
              session.commit()
      finally:
          session.close()
-    
-
 
 def downgrade():
     op.drop_constraint('shareable_booking_ibfk_2',

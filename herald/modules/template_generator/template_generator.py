@@ -16,7 +16,7 @@ def generate_event_template_params(event, config_client):
         },
         'texts': {
             'object_name': event.get('object_name'),
-            'title': 'Hystax notifications service',
+            'title': 'Nudgebee notifications service',
             'top_text': 'You have received the following notification for the customer ',
             'bottom_text1': 'You have received this email because you have event notification turned on. Please use ',
             'bottom_text2': 'if you want to alter your notification settings.'
@@ -65,11 +65,11 @@ def get_default_template():
             'telegram': 'https://cdn.hystax.com/OptScale/email-images/telegram.png'
         },
         'texts': {
-            'product': 'Hystax OptScale',
+            'product': 'Nudgebee',
             'dont_reply': 'Please do not reply to this email',
-            'copyright': 'Copyright © 2016-%s' % datetime.utcnow().year,
-            'address': '1250 Borregas Ave, Sunnyvale, CA 94089, USA',
-            'phone': '+1 628 251-1280'
+            'copyright': 'Copyright © 2022-%s' % datetime.utcnow().year,
+            'address': 'Pune',
+            'phone': '+ 9999999999'
         },
         'etcd': {
             'control_panel_link': "/public_ip"

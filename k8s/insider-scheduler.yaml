@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: insider-scheduler
+spec:
+  schedule: "45 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: insider-scheduler
+            env:
+            - name: HX_ETCD_HOST
+              value: "optscale-etcd.optscale.svc.cluster.local"
+            - name: HX_ETCD_PORT
+              value: "2379"
+            image: 280501305789.dkr.ecr.us-east-1.amazonaws.com/optscale-insider_scheduler:latest
+            imagePullPolicy: IfNotPresent
+          restartPolicy: Never

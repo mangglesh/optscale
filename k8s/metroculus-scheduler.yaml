@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: metroculus-scheduler
+spec:
+  schedule: "30 * * * *"
+  jobTemplate:
+    spec: 
+      template:
+        spec:
+          containers:
+          - name: metroculus-scheduler
+            image: 280501305789.dkr.ecr.us-east-1.amazonaws.com/optscale-metroculus_scheduler:latest
+            env:
+              - name: HX_ETCD_HOST
+                value: "optscale-etcd.optscale.svc.cluster.local"
+              - name: HX_ETCD_PORT
+                value: "2379"
+          restartPolicy: OnFailure

@@ -51,7 +51,7 @@ class DIWorker(ConsumerMixin):
     def mongo_cl(self):
         if self._mongo_cl is None:
             mongo_params = self.config_cl.mongo_params()
-            mongo_conn_string = "mongodb://%s:%s@%s:%s" % mongo_params[:-1]
+            mongo_conn_string = "mongodb+srv://%s:%s@%s" % mongo_params[:-2]
             self._mongo_cl = MongoClient(mongo_conn_string)
         return self._mongo_cl
 
@@ -213,7 +213,7 @@ if __name__ == '__main__':
             # Use lock to avoid migration problems with several diworkers
             # starting at the same time on cluster
             #with EtcdLock(config_cl, 'diworker_migrations'):
-            #migrator.migrate()
+            migrator.migrate()
             LOG.info("Migration completed")
             worker = DIWorker(conn, config_cl)
             worker.run()

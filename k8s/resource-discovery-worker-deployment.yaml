@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: resource-discovery-worker
+  name: resource-discovery-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: resource-discovery-worker
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/nuchbee: "true"
+        io.kompose.service: resource-discovery-worker
+    spec:
+      containers:
+        - env:
+            - name: HX_ETCD_HOST
+              value: "optscale-etcd.optscale.svc.cluster.local"
+            - name: HX_ETCD_PORT
+              value: "2379"
+          image: 280501305789.dkr.ecr.us-east-1.amazonaws.com/optscale-resource_discovery_worker:latest
+          name: resource-discovery-worker
+          resources: {}
+      restartPolicy: Always
+status: {}

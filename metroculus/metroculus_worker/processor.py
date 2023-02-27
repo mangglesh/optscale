@@ -9,7 +9,7 @@ from cloud_adapter.cloud import Cloud as CloudAdapter
 
 LOG = get_logger(__name__)
 K8S_RESOURCE_TYPE = 'K8s Pod'
-SUPPORTED_RESOURCE_TYPES = ['Instance', 'RDS Instance', K8S_RESOURCE_TYPE]
+SUPPORTED_RESOURCE_TYPES = ['Instance','Bucket', 'RDS Instance', K8S_RESOURCE_TYPE]
 METRIC_INTERVAL = 900
 METRIC_BULK_SIZE = 25
 POD_LIMIT_KEY = 'pod_limits'
@@ -99,7 +99,7 @@ class MetricsProcessor(object):
     def mongo_client(self):
         if not self._mongo_client:
             mongo_params = self.config_cl.mongo_params()
-            mongo_conn_string = "mongodb://%s:%s@%s:%s" % mongo_params[:-1]
+            mongo_conn_string = "mongodb+srv://%s:%s@%s" % mongo_params[:-2]
             self._mongo_client = MongoClient(mongo_conn_string)
         return self._mongo_client
 
@@ -245,14 +245,27 @@ class MetricsProcessor(object):
     def get_aws_metrics(cloud_account_id, cloud_resource_ids, resource_ids_map,
                         r_type, adapter, region, start_date, end_date):
         result = []
-        for name, (cloud_metric_namespace, cloud_metric_name) in {
+        default_metrics={
             'cpu': ('AWS/EC2', 'CPUUtilization'),
             'ram': ('CWAgent', 'mem_used_percent'),
             'disk_read_io': ('AWS/EC2', 'DiskReadOps'),
             'disk_write_io': ('AWS/EC2', 'DiskWriteOps'),
             'network_in_io': ('AWS/EC2', 'NetworkIn'),
             'network_out_io': ('AWS/EC2', 'NetworkOut')
-        }.items():
+        }
+        if r_type == "Bucket":
+            default_metrics = {
+                'bucket_size_bytes': ('AWS/S3', 'BucketSizeBytes'),
+                'number_of_objects': ('AWS/S3', 'NumberOfObjects')
+            }
+        if r_type == "RDS Instance":
+            default_metrics = {
+                'cpu': ('AWS/RDS', 'CPUUtilization'),
+                'network_out_io': ('AWS/RDS', 'NetworkReceiveThroughput'),
+                'network_in_io': ('AWS/RDS', 'NetworkTransmitThroughput'),
+                'db_connections': ('AWS/RDS', 'DatabaseConnections')
+            }
+        for name, (cloud_metric_namespace, cloud_metric_name) in default_metrics.items():
             last_start_date = start_date
             while last_start_date < end_date:
                 end_dt = last_start_date + timedelta(days=10)
@@ -264,11 +277,13 @@ class MetricsProcessor(object):
                     last_start_date, end_dt)
                 for cloud_resource_id, metrics in response.items():
                     for metric in metrics:
+                        if 'Average' not in metric:
+                            continue
                         value = metric.get('Average')
                         # if not value does not fit, 0 is valid value
                         if value is None:
                             continue
-                        if name in ['network_in_io', 'network_out_io']:
+                        if name in ['network_in_io', 'network_out_io'] and r_type != "RDS Instance":
                             # change bytes per min to bytes per second
                             value = value / 60
                         result.append({
