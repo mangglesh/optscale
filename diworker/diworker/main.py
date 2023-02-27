@@ -213,7 +213,7 @@ if __name__ == '__main__':
             # Use lock to avoid migration problems with several diworkers
             # starting at the same time on cluster
             #with EtcdLock(config_cl, 'diworker_migrations'):
-            #migrator.migrate()
+            migrator.migrate()
             LOG.info("Migration completed")
             worker = DIWorker(conn, config_cl)
             worker.run()
