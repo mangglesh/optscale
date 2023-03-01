@@ -9,7 +9,7 @@ from cloud_adapter.cloud import Cloud as CloudAdapter
 
 LOG = get_logger(__name__)
 K8S_RESOURCE_TYPE = 'K8s Pod'
-SUPPORTED_RESOURCE_TYPES = ['Instance','Bucket', 'RDS Instance', K8S_RESOURCE_TYPE]
+SUPPORTED_RESOURCE_TYPES = ['Instance','Bucket', 'RDS Instance', K8S_RESOURCE_TYPE, 'Serverless']
 METRIC_INTERVAL = 900
 METRIC_BULK_SIZE = 25
 POD_LIMIT_KEY = 'pod_limits'
@@ -258,6 +258,14 @@ class MetricsProcessor(object):
                 'bucket_size_bytes': ('AWS/S3', 'BucketSizeBytes'),
                 'number_of_objects': ('AWS/S3', 'NumberOfObjects')
             }
+
+        if r_type == "Serverless":
+            default_metrics = {
+                'duration': ('AWS/Lambda', 'Duration'),
+                'iterator_age': ('AWS/Lambda', 'IteratorAge'),
+                'offset_lag': ('AWS/Lambda', 'OffsetLag'),
+            }
+
         if r_type == "RDS Instance":
             default_metrics = {
                 'cpu': ('AWS/RDS', 'CPUUtilization'),

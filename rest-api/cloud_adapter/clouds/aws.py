@@ -1315,6 +1315,15 @@ class Aws(CloudBase):
                         'Name': 'StorageType', 
                         'Value': 'StandardStorage'
                     }]
+                if namespace == "AWS/Lambda":
+                    dimension = [{
+                        'Name': 'FunctionName',
+                        'Value': instance_id.rsplit(":", 1)[-1]
+                    },
+                    {
+                        'Name': 'Resource',
+                        'Value': instance_id.rsplit(":", 1)[-1]
+                    }]
                 if namespace == "AWS/RDS":
                     dimension = [{
                         'Name': 'DBInstanceIdentifier',
